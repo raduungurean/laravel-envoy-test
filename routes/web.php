@@ -12,5 +12,5 @@
 */
 
 Route::get('/test', function () {
-    return ['radu is testing'];
+    return \App\Task::all();
 });
