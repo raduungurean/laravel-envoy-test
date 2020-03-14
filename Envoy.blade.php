@@ -15,9 +15,15 @@
 	$slack = getenv('DEPLOY_SLACK_WEBHOOK');
 	$healthUrl = getenv('DEPLOY_HEALTH_CHECK');
 
+    // Production Database
+    $db_database = getenv('DB_DATABASE_PROD');
+    $db_username = getenv('DB_USERNAME_PROD');
+    $db_password = getenv('DB_PASSWORD_PROD');
+    $app_url = getenv('APP_URL_PROD');
+
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
-	$date = ( new DateTime )->format('YmdHis');
+	$date = ( new DateTime )->format('Y-m-d--His');
 	$env = isset($env) ? $env : "production";
 	$branch = isset($branch) ? $branch : "master";
 	$path = rtrim($path, '/');
@@ -43,11 +49,14 @@
 		cd {{ $path }}
 		git clone {{ $repo }} --branch={{ $branch }} --depth=1 -q {{ $release }}
 		echo "Repository cloned"
+        echo "release={{ $release  }} path={{ $path }}";
 		mv {{ $release }}/storage {{ $path }}/storage
+        sudo chgrp -R www-data {{ $path }}/storage
+        sudo chmod -R ug+rwx {{ $path }}/storage
 		ln -s {{ $path }}/storage {{ $release }}/storage
 		ln -s {{ $path }}/storage/public {{ $release }}/public/storage
 		echo "Storage directory set up"
-		cp {{ $release }}/.env.production {{ $path }}/.env
+		cp {{ $release }}/.env.example {{ $path }}/.env
 		ln -s {{ $path }}/.env {{ $release }}/.env
 		echo "Environment file set up"
 		rm -rf {{ $release }}
@@ -68,7 +77,7 @@
 	deployment_option_cleanup
 @endstory
 
-@story('deploy_cleanup')
+@story('deploy_cleanup', ['on' => 'web'])
 	deployment_start
 	deployment_links
 	deployment_composer
@@ -79,7 +88,7 @@
 	deployment_cleanup
 @endstory
 
-@story('rollback')
+@story('rollback', ['on' => 'web'])
 	deployment_rollback
 	health_check
 @endstory
@@ -97,6 +106,13 @@
 	ln -s {{ $path }}/storage {{ $release }}/storage
 	ln -s {{ $path }}/storage/public {{ $release }}/public/storage
 	echo "Storage directories set up"
+
+    sed -i "s/APP_ENV=.*/APP_ENV=production/" {{ $path }}/.env;
+    sed -i "s/APP_DEBUG=.*/APP_DEBUG=true/" {{ $path }}/.env;
+    sed -i "s/APP_URL=.*/APP_URL={{ $app_url }}/" {{ $path }}/.env;
+    sed -i "s/DB_DATABASE=.*/DB_DATABASE={{ $db_database }}/" {{ $path }}/.env;
+    sed -i "s/DB_USERNAME=.*/DB_USERNAME={{ $db_username }}/" {{ $path }}/.env;
+    sed -i "s/DB_PASSWORD=.*/DB_PASSWORD={{ $db_password }}/" {{ $path }}/.env;
 	ln -s {{ $path }}/.env {{ $release }}/.env
 	echo "Environment file set up"
 @endtask
@@ -108,7 +124,7 @@
 @endtask
 
 @task('deployment_migrate')
-	php {{ $release }}/artisan migrate --env={{ $env }} --force --no-interaction
+	php {{ $release }}/artisan migrate --env={{ $env }} --force --no-interaction --seed
 @endtask
 
 @task('deployment_cache')
@@ -157,4 +173,10 @@
 	cd {{ $path }}
 	ln -nfs {{ $path }}/$(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1) {{ $path }}/current
 	echo "Rolled back to $(find . -maxdepth 1 -name "20*" | sort  | tail -n 2 | head -n1)"
+@endtask
+
+@task('key_generate', ['on' => 'web'])
+    php {{ $path }}/current/artisan key:generate --force
+    php {{ $path }}/current/artisan cache:clear
+    php {{ $path }}/current/artisan config:cache
 @endtask
