@@ -34,6 +34,7 @@
 {{-- test task --}}
 @task('foo-web', ['on' => 'web'])
     ls -la
+    echo $env;
 @endtask
 
 {{-- init task --}}
@@ -46,7 +47,7 @@
 		ln -s {{ $path }}/storage {{ $release }}/storage
 		ln -s {{ $path }}/storage/public {{ $release }}/public/storage
 		echo "Storage directory set up"
-		cp {{ $release }}/.env.example {{ $path }}/.env
+		cp {{ $release }}/.env.production {{ $path }}/.env
 		ln -s {{ $path }}/.env {{ $release }}/.env
 		echo "Environment file set up"
 		rm -rf {{ $release }}
