@@ -10,6 +10,7 @@ class SeedTasksTable extends Migration
     {
         Artisan::call('db:seed', [
             '--class' => TasksTableSeeder::class,
+            '--force' => true,
         ]);
     }
 
