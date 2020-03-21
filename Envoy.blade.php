@@ -179,4 +179,5 @@
     php {{ $path }}/current/artisan key:generate --force
     php {{ $path }}/current/artisan cache:clear
     php {{ $path }}/current/artisan config:cache
+    php {{ $path }}/current/artisan jwt:secret
 @endtask
