@@ -1,10 +1,10 @@
 <?php
 
-Route::post('login', 'ApiController@login');
-Route::post('register', 'ApiController@register');
+Route::post('login', '\App\Http\Actions\LoginAction');
+Route::post('register', '\App\Http\Actions\RegisterAction');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
-    Route::get('logout', 'ApiController@logout');
+    Route::get('logout', '\App\Http\Actions\LogoutAction');
     Route::get('tasks', 'TaskController@index');
     Route::get('tasks/{id}', 'TaskController@show');
     Route::post('tasks', 'TaskController@store');
