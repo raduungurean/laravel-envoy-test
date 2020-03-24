@@ -2,14 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Auth;
 use JWTAuth;
 use App\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->user() instanceof MustVerifyEmail) {
+            echo 'is instance';
+            echo '|';
+            if ($request->user()->hasVerifiedEmail()) {
+                echo 'email verified';
+            } else {
+                echo 'email not verified';
+            }
+        } else {
+            echo 'is not instance';
+        }
+        die;
+
         return Task::all();
     }
 
