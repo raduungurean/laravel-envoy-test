@@ -25,6 +25,7 @@
     $app_url = getenv('APP_URL_PROD');
     $app_email = getenv('APP_EMAIL');
     $app_user = getenv('APP_USER');
+	$app_name = getenv('APP_NAME');
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
@@ -121,8 +122,9 @@
     sed -i "s/MAILGUN_DOMAIN=.*/MAILGUN_DOMAIN={{ $mailgun_domain }}/" {{ $path }}/.env;
     sed -i "s/MAILGUN_SECRET=.*/MAILGUN_SECRET={{ $mailgun_secret }}/" {{ $path }}/.env;
     sed -i "s/APP_EMAIL=.*/APP_EMAIL={{ $app_email }}/" {{ $path }}/.env;
+	sed -i "s/APP_NAME=.*/APP_NAME={{ $app_name }}/" {{ $path }}/.env;
     sed -i "s/APP_USER=.*/APP_USER={{ $app_user }}/" {{ $path }}/.env;
-	sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS={{ $mail_from_address }}/" {{ $path }}/.env;
+	sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS={{ $app_user }}/" {{ $path }}/.env;
 	ln -s {{ $path }}/.env {{ $release }}/.env
 	echo "Environment file set up"
 @endtask
