@@ -17,7 +17,7 @@ class EmailVerifyAction extends Controller
             ->first();
         if ($checkHash) {
             $user = User::find($id);
-            if ($checkHash->activted === 0 || is_null($checkHash->activated)) {
+            if ($checkHash->activated === 0 || is_null($checkHash->activated)) {
                 $checkHash->activated = 1;
                 $checkHash->save();
                 return view('user-messages.activated', [ 'user' => $user ]);
