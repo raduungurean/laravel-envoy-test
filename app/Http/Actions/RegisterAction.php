@@ -2,11 +2,14 @@
 
 namespace App\Http\Actions;
 
+use App\Hash;
 use App\Http\Controllers\Controller;
+use App\Mail\RegisteredPleaseActivate;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Validator;
+use Mail;
 
 class RegisterAction extends Controller
 {
@@ -16,23 +19,37 @@ class RegisterAction extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:players,email',
-            'password'=> 'required'
+            'password' => 'required'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         }
 
-        $user = new User();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->save();
+        $player = new User();
+        $player->first_name = $request->first_name;
+        $player->last_name = $request->last_name;
+        $player->email = $request->email;
+        $player->password = bcrypt($request->password);
+        $player->save();
+
+        $playerId = $player->id;
+
+        if ($playerId) {
+            $hash = new Hash();
+            $hash->player_id = $playerId;
+            $hash->hash = hash_hmac('sha256', str_random(40), config('app.key'));;
+            $hash->save();
+
+            if ($hash->id) {
+                Mail::to($player)
+                    ->send(new RegisteredPleaseActivate($player, $hash->hash));
+            }
+        }
 
         return response()->json([
-            'success'   =>  true,
-            'data'      =>  $user
+            'success' => true,
+            'data' => $player
         ], 200);
     }
 }

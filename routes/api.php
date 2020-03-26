@@ -5,6 +5,8 @@ Route::get('test', '\App\Http\Actions\TestAction');
 Route::post('login', '\App\Http\Actions\LoginAction');
 Route::post('register', '\App\Http\Actions\RegisterAction');
 
+Route::get('email/verify/{id}/{hash}', '\App\Http\Actions\EmailVerifyAction')->name('verification.verify');
+
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', '\App\Http\Actions\LogoutAction');
 });

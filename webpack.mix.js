@@ -13,3 +13,11 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
+
+mix.browserSync({
+    open: 'external',
+    proxy: 'api.league7.local',
+    host: 'api.league7.local',
+    logLevel: 'debug',
+    port: 8081
+});
