@@ -5,7 +5,9 @@ Route::get('test', '\App\Http\Actions\TestAction');
 Route::post('login', '\App\Http\Actions\LoginAction');
 Route::post('register', '\App\Http\Actions\RegisterAction');
 
-Route::get('email/verify/{id}/{hash}', '\App\Http\Actions\EmailVerifyAction')->name('verification.verify');
+Route::get('email/verify/{id}/{hash}', '\App\Http\Actions\EmailVerifyAction');
+Route::post('password-recovery-email', '\App\Http\Actions\PasswordRecoveryLinkAction');
+Route::get('password/{id}/{hash}', '\App\Http\Actions\RecoverPasswordAction');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', '\App\Http\Actions\LogoutAction');

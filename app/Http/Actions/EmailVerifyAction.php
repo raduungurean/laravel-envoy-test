@@ -15,16 +15,17 @@ class EmailVerifyAction extends Controller
             ->where('hash', $hash)
             ->where('hash_type', 'verify-account')
             ->first();
+
         if ($checkHash) {
             $user = User::find($id);
             if ($checkHash->activated === 0 || is_null($checkHash->activated)) {
                 $checkHash->activated = 1;
                 $checkHash->save();
-                return view('user-messages.activated', [ 'user' => $user ]);
+                return view('auth-flow.activated', [ 'user' => $user ]);
             } else {
-                return view('user-messages.activated-already', ['user' => $user]);
+                return view('auth-flow.activated', ['user' => $user]);
             }
         }
-        return view('user-messages.activation-error');
+        return view('auth-flow.activation-error');
     }
 }

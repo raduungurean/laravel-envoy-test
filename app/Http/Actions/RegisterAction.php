@@ -26,14 +26,14 @@ class RegisterAction extends Controller
             return response()->json(['errors' => $validator->errors()]);
         }
 
-        $player = new User();
-        $player->first_name = $request->first_name;
-        $player->last_name = $request->last_name;
-        $player->email = $request->email;
-        $player->password = bcrypt($request->password);
-        $player->save();
+        $user = new User();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
 
-        $playerId = $player->id;
+        $playerId = $user->id;
 
         if ($playerId) {
             $hash = new Hash();
@@ -42,14 +42,14 @@ class RegisterAction extends Controller
             $hash->save();
 
             if ($hash->id) {
-                Mail::to($player)
-                    ->send(new RegisteredPleaseActivate($player, $hash->hash));
+                Mail::to($user)
+                    ->send(new RegisteredPleaseActivate($user, $hash->hash));
             }
         }
 
         return response()->json([
             'success' => true,
-            'data' => $player
+            'data' => $user
         ], 200);
     }
 }

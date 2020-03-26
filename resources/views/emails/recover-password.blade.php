@@ -6,25 +6,22 @@
             <tr>
                 <td class="content-cell">
                     <div class="f-fallback">
-                        <h1>Welcome, {{$user->first_name}}!</h1>
-                        <p>Thanks for trying {{$app_name}}. We’re thrilled to have you on board. To get the most out of {{$app_name}}, do this primary next step:</p>
-                        <table class="body-action" align="center" width="100%" cellpadding="0"
-                               cellspacing="0" role="presentation">
+                        <h1>Hi {{$user->first_name}},</h1>
+                        <p>You recently requested to reset your password for your {{$app_name}} account. Use the button below to reset it. <strong>This password reset is only valid for the next 24 hours.</strong></p>
+                        <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                             <tr>
                                 <td align="center">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0"
-                                           role="presentation">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
                                         <tr>
                                             <td align="center">
-                                                <a style="color: #fff" href="{{$action_url}}" class="f-fallback button" target="_blank">Verify your email address</a>
+                                                <a style="color: #ffffff" href="{{$action_url}}" class="f-fallback button button--green" target="_blank">Click to reset your password</a>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
                             </tr>
                         </table>
-                        <p>If you have any questions, feel free to <a href="mailto:{{$support_email}}">email us</a>. (We're lightning quick at replying)</p>
-                        <p>Thanks,<br>{{$app_user}} and the {{$app_name}} Team</p>
+                        <p>Thanks, <br>The {{$app_name}} Team</p>
                         <table class="body-sub" role="presentation">
                             <tr>
                                 <td>
