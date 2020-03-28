@@ -9,9 +9,11 @@
         <span class="sr-only">Loading...</span>
     </div>
 </div>
-@include('includes.nav')
-<div class="container">
-    @yield('content')
+<div id="app">
+    @include('includes.nav')
+    <div class="container-fluid">
+        @yield('content')
+    </div>
 </div>
 @include('includes.footer')
 </body>

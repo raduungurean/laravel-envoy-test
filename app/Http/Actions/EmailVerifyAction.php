@@ -23,7 +23,7 @@ class EmailVerifyAction extends Controller
                 $checkHash->save();
                 return view('auth-flow.activated', [ 'user' => $user ]);
             } else {
-                return view('auth-flow.activated', ['user' => $user]);
+                return view('auth-flow.activated-already', ['user' => $user]);
             }
         }
         return view('auth-flow.activation-error');
