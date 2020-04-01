@@ -19,6 +19,8 @@ return [
 
     'user' => env('APP_USER'),
 
+    'test_url' => env('TEST_URL'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
