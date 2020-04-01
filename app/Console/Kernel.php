@@ -26,6 +26,8 @@ class Kernel extends ConsoleKernel
     {
          $schedule->command('email-cron-email')
                   ->everyFiveMinutes();
+        $schedule->command('hashes:clean')
+            ->daily();
     }
 
     /**
