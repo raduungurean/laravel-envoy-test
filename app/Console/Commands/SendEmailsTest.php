@@ -60,6 +60,11 @@ class SendEmailsTest extends Command
 
         if (strpos($response, 'toate intervalele de livrare sunt ocupate')) {
             return false;
+        } else {
+            Mail::raw('test Hi, welcome user!', function ($message) {
+                $message->to(config('app.email'))
+                    ->subject('check now - cron run');
+            });
         }
 
         return true;
