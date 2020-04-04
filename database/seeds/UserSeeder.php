@@ -21,7 +21,21 @@ class UserSeeder extends MySeeder
             $user->updated_at = $jsonUser->updated_at;
             $user->password = $jsonUser->password;
             $user->save();
+            $id = $user->id;
+
+            if ($id) {
+                DB::table('user_group')->insert(
+                    ['user_id' => $id, 'group_id' => 1, 'created_at' => now(), 'updated_at' => now()]
+                );
+                if ($jsonUser->photo) {
+                    $photoName = last(explode('/', $jsonUser->photo));
+                    $contents = file_get_contents($jsonUser->photo);
+                    Storage::disk('local')->put('photos/' . $id . '/' . $photoName, $contents);
+                }
+            }
+
             $this->command->info('added ' . $user->username);
         }
+
     }
 }
