@@ -16,10 +16,10 @@ class RegisterAction extends Controller
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:players,email',
-            'password' => 'required'
+            'first_name' => 'required|max:100',
+            'last_name' => 'required|max:100',
+            'email' => 'required|email|unique:players,email|max:100',
+            'password' => 'required|min:6'
         ]);
 
         if ($validator->fails()) {
