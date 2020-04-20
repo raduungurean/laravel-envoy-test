@@ -8,9 +8,13 @@ class DatabaseSeeder extends Seeder
     {
         \App\User::query()->truncate();
         \App\Group::query()->truncate();
+        \App\Location::query()->truncate();
+        \App\Match::query()->truncate();
+        \App\Subscription::query()->truncate();
         DB::table('user_group')->truncate();
-        Schema::dropIfExists('tasks');
         $this->call(GroupsSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(MatchesSeeder::class);
+        $this->call(LocationsTableSeeder::class);
     }
 }
