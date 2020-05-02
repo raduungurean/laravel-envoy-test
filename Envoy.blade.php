@@ -26,7 +26,7 @@
     $app_email = getenv('APP_EMAIL');
     $app_user = getenv('APP_USER');
 	$app_name = getenv('APP_NAME');
-	$testUrl = getenv('TEST_URL');
+    $importDataUrl = getenv('IMPORT_DATA_URL');
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
