@@ -125,7 +125,7 @@
     sed -i "s/APP_EMAIL=.*/APP_EMAIL={{ $app_email }}/" {{ $path }}/.env;
 	sed -i "s/APP_NAME=.*/APP_NAME={{ $app_name }}/" {{ $path }}/.env;
     sed -i "s/APP_USER=.*/APP_USER={{ $app_user }}/" {{ $path }}/.env;
-    sed -i "s/TEST_URL=.*/IMPORT_DATA_URL={{ $importDataUrl }}/" {{ $path }}/.env;
+    sed -i "s/IMPORT_DATA_URL=.*/IMPORT_DATA_URL={{ $importDataUrl }}/" {{ $path }}/.env;
 	sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS={{ $mail_from_address }}/" {{ $path }}/.env;
 	ln -s {{ $path }}/.env {{ $release }}/.env
 	echo "Environment file set up"
