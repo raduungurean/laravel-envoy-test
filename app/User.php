@@ -21,6 +21,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'stats' => 'array'
     ];
 
     protected $table = 'players';
@@ -33,5 +34,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany('App\Group', 'user_group');
     }
 }
