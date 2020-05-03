@@ -29,13 +29,23 @@ class UserSeeder extends MySeeder
                 );
                 if ($jsonUser->photo) {
                     $photoName = last(explode('/', $jsonUser->photo));
+                    $user->photo = $photoName;
+                    $user->save();
                     $contents = file_get_contents($jsonUser->photo);
                     Storage::disk('local')->put('photos/' . $id . '/' . $photoName, $contents);
                 }
+                $groupId = DB::getPdo()->lastInsertId();
+                DB::table('role_user_group')->insert(
+                    ['role_id' => 4, 'user_id' => $id, 'group_id' => $groupId]
+                );
             }
 
             $this->command->info('added ' . $user->username);
         }
+
+        DB::table('users')
+            ->where('id', 1)
+            ->update(['email_verified_at' => date('Y-m-d H:i:s')]);
 
     }
 }

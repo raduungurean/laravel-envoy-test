@@ -18,7 +18,7 @@ class RegisterAction extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:100',
             'last_name' => 'required|max:100',
-            'email' => 'required|email|unique:players,email|max:100',
+            'email' => 'required|email|unique:users,email|max:100',
             'password' => 'required|min:6'
         ]);
 

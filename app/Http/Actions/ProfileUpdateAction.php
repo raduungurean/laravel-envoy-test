@@ -17,8 +17,8 @@ class ProfileUpdateAction
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:100',
             'last_name' => 'required|max:100',
-            'email' => 'required|email|unique:players,email,' . $userId . '|max:100',
-            'username' => 'max:50|unique:players,username,' . $userId,
+            'email' => 'required|email|unique:users,email,' . $userId . '|max:100',
+            'username' => 'max:50|unique:users,username,' . $userId,
         ]);
 
         if ($validator->fails()) {

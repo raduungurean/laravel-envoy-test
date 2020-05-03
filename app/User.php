@@ -24,7 +24,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'stats' => 'array'
     ];
 
-    protected $table = 'players';
+    protected $table = 'users';
 
     public function getJWTIdentifier()
     {
