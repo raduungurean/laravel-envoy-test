@@ -3,6 +3,7 @@
 namespace App\Http\Actions;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
 
@@ -20,9 +21,13 @@ class LoginAction extends Controller
             ], 401);
         }
 
+        $userId = auth()->user()->id;
+        $user = User::with('groups')->find($userId);
+
         return response()->json([
             'success' => true,
             'token' => $token,
+            'user' => $user,
         ]);
     }
 }
