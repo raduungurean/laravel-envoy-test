@@ -23,7 +23,7 @@ class RegisterAction extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
+            return response()->json(['errors' => $validator->errors()], 400);
         }
 
         $user = new User();
