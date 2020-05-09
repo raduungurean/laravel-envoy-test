@@ -11,6 +11,7 @@ class PlayerPictureAction extends Controller
 {
     public function __invoke(Request $request)
     {
+        // TODO to verify by groupId if has access to view
         $user = $request->user();
         $userArray = $user->toArray();
         $photo = $userArray['photo'];
