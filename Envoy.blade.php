@@ -27,6 +27,8 @@
     $app_user = getenv('APP_USER');
 	$app_name = getenv('APP_NAME');
     $importDataUrl = getenv('IMPORT_DATA_URL');
+    $googleClientId = getenv('GOOGLE_CLIENT_ID');
+    $googleClientSecret = getenv('GOOGLE_CLIENT_SECRET');
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
@@ -77,7 +79,6 @@
 	deployment_start
 	deployment_links
 	deployment_composer
-	deployment_migrate
 	deployment_cache
 	deployment_finish
 	health_check
@@ -127,6 +128,9 @@
     sed -i "s/APP_USER=.*/APP_USER={{ $app_user }}/" {{ $path }}/.env;
     sed -i "s/IMPORT_DATA_URL=.*/IMPORT_DATA_URL={{ $importDataUrl }}/" {{ $path }}/.env;
 	sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS={{ $mail_from_address }}/" {{ $path }}/.env;
+    sed -i "s/GOOGLE_CLIENT_ID=.*/GOOGLE_CLIENT_ID={{ $googleClientId }}/" {{ $path }}/.env;
+    sed -i "s/GOOGLE_CLIENT_SECRET=.*/GOOGLE_CLIENT_SECRET={{ $googleClientSecret }}/" {{ $path }}/.env;
+
 	ln -s {{ $path }}/.env {{ $release }}/.env
 	echo "Environment file set up"
 @endtask
