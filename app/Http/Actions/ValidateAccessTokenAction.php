@@ -3,31 +3,52 @@
 namespace App\Http\Actions;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use Mockery\Exception;
 use Socialite;
 use Mail;
+use JWTAuth;
 
 class ValidateAccessTokenAction extends Controller
 {
     public function __invoke(Request $request)
     {
         try {
-            $user = Socialite::driver($request->provider)
+            $providerUser = Socialite::driver($request->provider)
                 ->stateless()
                 ->userFromToken($request->accessToken);
         } catch (\GuzzleHttp\Exception\ClientException $clientException) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error authenticating. Please try again latter',
-            ], 400);
+            return $this->responseError();
         } catch (Exception $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error authenticating. Please try again latter',
-            ], 400);
+            return $this->responseError();
         }
 
-        return response()->json($user);
+        $user = User::with('groups')
+            ->where('email', $providerUser->email)
+            ->first();
+
+        if ($user) {
+            $token = JWTAuth::fromUser($user);
+            return response()->json([
+                'success' => true,
+                'token' => $token,
+                'user' => $user,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'account_does_not_exist',
+            'user' => $providerUser,
+        ]);
+    }
+
+    private function responseError(): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error authenticating. Please try again latter',
+        ], 400);
     }
 }
