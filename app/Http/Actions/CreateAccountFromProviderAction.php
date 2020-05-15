@@ -11,7 +11,7 @@ use Storage;
 use JWTAuth;
 use Str;
 
-class CreateAccountAction extends Controller
+class CreateAccountFromProviderAction extends Controller
 {
     public function __invoke(Request $request)
     {
@@ -45,6 +45,7 @@ class CreateAccountAction extends Controller
             $newUserAccount->first_name = $firstName;
             $newUserAccount->last_name = $lastName;
             $newUserAccount->email = $email;
+            $newUserAccount->email_verified_at = now();
             $newUserAccount->password = bcrypt(Str::random(40));
             $newUserAccount->save();
 
