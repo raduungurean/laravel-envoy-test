@@ -10,6 +10,7 @@ Route::get('password/{id}/{hash}', '\App\Http\Actions\RecoverPasswordFormAction'
 Route::post('password', '\App\Http\Actions\RecoverPasswordAction');
 
 Route::post('validate-access-token', '\App\Http\Actions\ValidateAccessTokenAction');
+Route::post('create-account', '\App\Http\Actions\CreateAccountAction');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', '\App\Http\Actions\LogoutAction');
