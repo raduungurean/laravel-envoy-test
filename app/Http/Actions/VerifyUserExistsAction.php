@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use Mail;
+use JWTAuth;
 
 class VerifyUserExistsAction extends Controller
 {
