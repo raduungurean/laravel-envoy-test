@@ -37,6 +37,7 @@ class ValidateAccessTokenAction extends Controller
             ]);
         }
 
+        // success true
         return response()->json([
             'success' => true,
             'message' => 'account_does_not_exist',

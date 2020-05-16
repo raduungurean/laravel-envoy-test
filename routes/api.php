@@ -18,12 +18,13 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
 Route::group(['middleware' => ['auth.jwt', 'check-email']], function () {
     Route::get('players', '\App\Http\Actions\PlayersAction');
-    Route::get('player-picture', '\App\Http\Actions\PlayerPictureAction');
     Route::get('players/{groupId}', '\App\Http\Actions\PlayersAction');
 });
 
 Route::group(['middleware' => ['auth.jwt']], function () {
+    Route::get('player-picture', '\App\Http\Actions\PlayerPictureAction');
     Route::put('profile', '\App\Http\Actions\ProfileUpdateAction');
+    Route::get('verify-user-exists', '\App\Http\Actions\VerifyUserExistsAction');
     Route::put('change-password', '\App\Http\Actions\ChangePasswordAction');
     Route::post('profile-picture', '\App\Http\Actions\ProfilePictureAction');
 });
