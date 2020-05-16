@@ -5,8 +5,6 @@ namespace App\Http\Actions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
-use Mail;
-use JWTAuth;
 
 class VerifyUserExistsAction extends Controller
 {
@@ -19,10 +17,8 @@ class VerifyUserExistsAction extends Controller
             ->first();
 
         if ($user) {
-            $token = JWTAuth::fromUser($user);
             return response()->json([
                 'success' => true,
-                'token' => $token,
                 'user' => $user,
             ]);
         }

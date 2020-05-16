@@ -7,7 +7,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Mockery\Exception;
 use Socialite;
-use Mail;
 use JWTAuth;
 
 class ValidateAccessTokenAction extends Controller

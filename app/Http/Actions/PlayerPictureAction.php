@@ -4,7 +4,6 @@ namespace App\Http\Actions;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Mail;
 use Storage;
 
 class PlayerPictureAction extends Controller

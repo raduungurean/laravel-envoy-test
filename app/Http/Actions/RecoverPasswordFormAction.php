@@ -5,7 +5,6 @@ namespace App\Http\Actions;
 use App\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\User;
 use Mail;
 
 class RecoverPasswordFormAction extends Controller
