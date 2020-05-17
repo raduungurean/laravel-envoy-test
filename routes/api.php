@@ -13,6 +13,7 @@ Route::post('validate-access-token', '\App\Http\Actions\ValidateAccessTokenActio
 Route::post('create-account', '\App\Http\Actions\CreateAccountFromProviderAction');
 
 Route::post('log', '\App\Http\Actions\LogAction');
+Route::get('logs', '\App\Http\Actions\LogsAction');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', '\App\Http\Actions\LogoutAction');
