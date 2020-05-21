@@ -10,7 +10,7 @@ class LogsAction extends Controller
 {
     public function __invoke(Request $request)
     {
-        echo File::get(storage_path('logs/boa.log'));
-        die;
+//        echo File::get(storage_path('logs/boa.log'));
+//        die;
     }
 }

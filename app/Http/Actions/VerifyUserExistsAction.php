@@ -3,23 +3,34 @@
 namespace App\Http\Actions;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\User;
 
 class VerifyUserExistsAction extends Controller
 {
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function __invoke(Request $request)
     {
         $userId = auth()->user()->id;
 
-        $user = User::with('groups')
-            ->where('id', $userId)
+        $user = User::where('id', $userId)
             ->first();
 
         if ($user) {
+            $userArr = $user->toArray();
+            $groups = $this->userRepository->getGroups($user->id);
+            $userArr['groups'] = $groups;
+
             return response()->json([
                 'success' => true,
-                'user' => $user,
+                'user' => $userArr,
             ]);
         }
 

@@ -11,7 +11,8 @@ class LogAction extends Controller
     public function __invoke(Request $request)
     {
         try {
-            Log::driver('boa')->info('log:' . (!empty($request->info) ? $request->info : 'test'));
+            Log::driver('boa')
+                ->info('log:' . (!empty($request->info) ? $request->info : 'test'));
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

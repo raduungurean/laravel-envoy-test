@@ -3,6 +3,7 @@
 namespace App\Http\Actions;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
 use Mockery\Exception;
@@ -11,6 +12,13 @@ use JWTAuth;
 
 class ValidateAccessTokenAction extends Controller
 {
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function __invoke(Request $request)
     {
         try {
@@ -23,16 +31,21 @@ class ValidateAccessTokenAction extends Controller
             return $this->responseError();
         }
 
-        $user = User::with('groups')
-            ->where('email', $providerUser->email)
+        $user = User::where('email', $providerUser->email)
             ->first();
 
         if ($user) {
+
+            $userArr = $user->toArray();
+            $groups = $this->userRepository->getGroups($user->id);
+            $userArr['groups'] = $groups;
+
             $token = JWTAuth::fromUser($user);
+
             return response()->json([
                 'success' => true,
                 'token' => $token,
-                'user' => $user,
+                'user' => $userArr,
             ]);
         }
 
