@@ -22,7 +22,10 @@ class ProfileUpdateAction
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
+            return response()->json(
+                ['errors' => $validator->errors()],
+                400
+            );
         }
 
         $failed = false;
@@ -40,7 +43,10 @@ class ProfileUpdateAction
         }
 
         if ($failed) {
-            return response()->json(['errors' => ['general' => 'error updating the profile']]);
+            return response()->json(
+                ['errors' => ['general' => 'error updating the profile']],
+                400
+            );
         }
 
         return response()->json([

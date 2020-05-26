@@ -19,7 +19,10 @@ class PasswordRecoveryLinkAction extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
+            return response()->json(
+                ['errors' => $validator->errors()],
+                400
+            );
         }
 
         $user = User::where('email', $request->email)->first();

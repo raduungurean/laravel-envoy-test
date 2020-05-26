@@ -28,14 +28,19 @@ class AddGroupAction extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
+            return response()->json(
+                ['errors' => $validator->errors()],
+                400
+            );
         }
 
         // TODO, to refactor this
         // repository
         $g = new Group();
         $g->name = $request->group_name;
+        $g->short_description = $request->short_description;
         $g->player_id = $userId;
+
         if ($g->save()) {
             $groupId = $g->id;
             DB::table('role_user_group')->insert(

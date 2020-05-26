@@ -19,7 +19,10 @@ class ProfilePictureAction
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
+            return response()->json(
+                ['errors' => $validator->errors()],
+                400
+            );
         }
 
         $extension = $request->file('photo')->extension();
@@ -46,7 +49,8 @@ class ProfilePictureAction
 
         if ($failed) {
             return response()->json(
-                ['errors' => ['general' => 'error updating the password']]
+                ['errors' => ['general' => 'error updating the password']],
+                400
             );
         }
 

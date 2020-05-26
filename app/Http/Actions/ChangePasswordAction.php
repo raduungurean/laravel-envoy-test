@@ -19,7 +19,10 @@ class ChangePasswordAction
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
+            return response()->json(
+                ['errors' => $validator->errors()],
+                400
+            );
         }
 
         $failed = false;
@@ -35,7 +38,8 @@ class ChangePasswordAction
 
         if ($failed) {
             return response()->json(
-                ['errors' => ['general' => 'error updating the password']]
+                ['errors' => [ 'general' => 'error updating the password' ]],
+                400
             );
         }
 
