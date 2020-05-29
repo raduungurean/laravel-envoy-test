@@ -54,6 +54,6 @@ class RecoverPasswordAction extends Controller
         return response()->json([
             'success' => false,
             'message' => 'Sorry! There was an error',
-        ]);
+        ], 401);
     }
 }
