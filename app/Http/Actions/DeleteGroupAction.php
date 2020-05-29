@@ -9,24 +9,24 @@ use Illuminate\Http\Request;
 class DeleteGroupAction extends Controller
 {
     // !!!! TO CHECK IF IS ADMIN FOR $request->id GROUP TOO
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, int $groupId)
     {
         $userGroups = $request->user()->groups->toArray();
         $userGroupIds = array_column($userGroups, 'id');
 
         // or validation
-        if (!isset($request->id)) {
+        if (!isset($groupId)) {
             return $this->badRequestError();
         }
 
-        if ((isset($request->id) && !in_array($request->id, $userGroupIds))) {
+        if ((isset($groupId) && !in_array($groupId, $userGroupIds))) {
             return response()->json(
                 ['errors' => [ 'general' => 'not authorized' ]],
                 401
             );
         }
 
-        $deleted = Group::where('id', $request->id)->delete();
+        $deleted = Group::where('id', $groupId)->delete();
 
         if (!$deleted) {
             return $this->badRequestError();
