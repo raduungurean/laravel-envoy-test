@@ -24,8 +24,9 @@ class UserSeeder extends MySeeder
             $id = $user->id;
 
             if ($id) {
+                $groupId = 1;
                 DB::table('user_group')->insert(
-                    ['user_id' => $id, 'group_id' => 1, 'created_at' => now(), 'updated_at' => now()]
+                    ['user_id' => $id, 'group_id' => $groupId, 'created_at' => now(), 'updated_at' => now()]
                 );
                 if ($jsonUser->photo) {
                     $photoName = last(explode('/', $jsonUser->photo));
@@ -34,7 +35,6 @@ class UserSeeder extends MySeeder
                     $contents = file_get_contents($jsonUser->photo);
                     Storage::disk('local')->put('photos/' . $id . '/' . $photoName, $contents);
                 }
-                $groupId = DB::getPdo()->lastInsertId();
                 DB::table('role_user_group')->insert(
                     ['role_id' => 4, 'user_id' => $id, 'group_id' => $groupId]
                 );
