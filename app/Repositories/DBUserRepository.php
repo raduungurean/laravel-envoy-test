@@ -19,9 +19,30 @@ class DBUserRepository implements UserRepository
             WHERE g.deleted_at IS NULL
             GROUP BY ug.group_id';
 
-        return DB::select( DB::raw( $sql ), array(
+        $groups = DB::select( DB::raw( $sql ), array(
             'userId' => $userId,
             'userId1' => $userId,
         ));
+
+        return collect($groups)->map(function($group) {
+            $group->roles = array_map(function($role) {
+                return strtolower($role);
+            }, explode(',', $group->roles));
+            return $group;
+        });
+    }
+
+    public function getCountGroups(int $userId)
+    {
+        $sql = "SELECT COUNT(DISTINCT ug.id) as count
+                    FROM `user_group` ug
+                    INNER JOIN groups g on g.id = ug.group_id AND g.deleted_at IS NULL
+                    WHERE ug.user_id = :userId";
+
+        $count = DB::select( DB::raw( $sql ), array(
+            'userId' => $userId,
+        ));
+
+        return $count[0]->count;
     }
 }

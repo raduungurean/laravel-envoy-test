@@ -21,6 +21,8 @@ return [
 
     'test_url' => env('TEST_URL'),
 
+    'maxgroups' => 5,
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

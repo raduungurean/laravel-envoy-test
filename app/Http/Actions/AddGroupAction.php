@@ -34,6 +34,15 @@ class AddGroupAction extends Controller
             );
         }
 
+        $countGroups = $this->userRepository->getCountGroups($userId);
+
+        if ($countGroups >= config('app.maxgroups')) {
+            return response()->json(
+                ['errors' => ['max-groups' => 'Too many groups']],
+                400
+            );
+        }
+
         // TODO, to refactor this
         // repository
         $g = new Group();
