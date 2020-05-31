@@ -24,6 +24,8 @@ Route::group(['middleware' => ['auth.jwt', 'check-email']], function () {
     Route::get('players/{groupId}', '\App\Http\Actions\PlayersAction');
     Route::post('groups', '\App\Http\Actions\AddGroupAction');
     Route::delete('groups/{groupId}', '\App\Http\Actions\DeleteGroupAction');
+    Route::get('groups/{groupId}', '\App\Http\Actions\GroupAction');
+    Route::put('groups/{groupId}', '\App\Http\Actions\EditGroupAction');
 });
 
 Route::group(['middleware' => ['auth.jwt']], function () {

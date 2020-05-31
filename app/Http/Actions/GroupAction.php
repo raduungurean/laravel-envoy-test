@@ -6,12 +6,13 @@ use App\Group;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class DeleteGroupAction extends Controller
+class GroupAction extends Controller
 {
-    // !!!! TO CHECK IF IS ADMIN FOR $groupId GROUP TOO
+    // !!!! TO CHECK IF IS ADMIN/HELPER FOR $groupId
     public function __invoke(Request $request, int $groupId)
     {
         $userGroups = $request->user()->groups->toArray();
+        // $userId = $request->user()->id;
         $userGroupIds = array_column($userGroups, 'id');
 
         // or validation
@@ -26,16 +27,17 @@ class DeleteGroupAction extends Controller
             );
         }
 
-        $deleted = Group::where('id', $groupId)->delete();
+        $group = Group::where('id', $groupId)->get();
 
-        if (!$deleted) {
-            return $this->badRequestError();
+        if (!$group->isEmpty()) {
+            return response()->json([
+                'success' => true,
+                'group' => $group->first(),
+            ]);
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Successfully Deleted.'
-        ]);
+        return $this->badRequestError();
+
     }
 
     private function badRequestError(): \Illuminate\Http\JsonResponse

@@ -4,7 +4,6 @@ namespace App\Http\Actions;
 
 use App\Http\Controllers\Controller;
 use DB;
-use Cache;
 use Illuminate\Http\Request;
 
 class PlayersAction extends Controller
