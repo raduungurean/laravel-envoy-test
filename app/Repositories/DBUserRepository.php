@@ -45,4 +45,22 @@ class DBUserRepository implements UserRepository
 
         return $count[0]->count;
     }
+
+    public function inGroup(string $email, int $groupId)
+    {
+        return DB::table('user_group')
+            ->join('users', 'users.id', '=', 'user_group.user_id')
+            ->where('user_group.group_id', $groupId)
+            ->where('users.email', $email)
+            ->exists();
+    }
+
+    public function isEditorForGroup(int $userId, int $groupId)
+    {
+        return DB::table('role_user_group')
+            ->where('user_id', $userId)
+            ->where('group_id', $groupId)
+            ->whereIn('role_id', [1, 2, 3])
+            ->exists();
+    }
 }

@@ -7,7 +7,7 @@
                 <td class="content-cell">
                     <div class="f-fallback">
                         <h1>Welcome, {{$user->first_name}}!</h1>
-                        <p>Thanks for trying {{$app_name}}. We’re thrilled to have you on board. To get the most out of {{$app_name}}, do this primary next step:</p>
+                        <p>Thanks for trying {{$app_name}}. We're thrilled to have you on board. To get the most out of {{$app_name}}, do this primary next step:</p>
                         <table class="body-action" align="center" width="100%" cellpadding="0"
                                cellspacing="0" role="presentation">
                             <tr>
