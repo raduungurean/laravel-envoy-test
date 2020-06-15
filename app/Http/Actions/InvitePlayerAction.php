@@ -43,7 +43,11 @@ class InvitePlayerAction extends Controller
 
         $groupId = $request->input('group');
         $email = $request->input('email_address');
+        $message = $request->input('message');
 
+        // TODO: maybe create a service
+        // to also include the super admin
+        // $this->hasRights('send_invitaion', $userId, $groupId)
         if (!$this->userRepository->isEditorForGroup($userId, $groupId)) {
             return response()->json(
                 ['errors' => ['general' => 'unauthorized']],
@@ -55,24 +59,31 @@ class InvitePlayerAction extends Controller
             return [];
         }
 
-        // TODO: maybe create a service
-        // to also include the super admin
-        // $this->hasRights('send_invitaion', $userId, $groupId)
+        $emailAlreadyIn = $this->userRepository->checkByEmail($email);
+
+        // has an invitation but did not accept it
         if ($this->inviteRepository->checkByGroup($email, $groupId, 'no')) {
-            // TODO: maybe resend the email here by only 3-4 times
+            $this->sendInvite($email, $groupId, $user, $emailAlreadyIn);
             return [];
         }
 
-        $invited = $this->inviteRepository->add($email, $groupId, $userId);
+        // save the invitation
+        $invited = $this->inviteRepository
+            ->add($email, $groupId, $userId, $message, $emailAlreadyIn);
 
         if ($invited) {
-            $invite = $this->inviteRepository->get($email, $groupId);
-            Mail::to($email)
-                ->send(new InviteSent($invite, $user));
+            $this->sendInvite($email, $groupId, $user, $emailAlreadyIn);
         }
 
         return response()->json([
             'success' => true,
         ], 200);
+    }
+
+    private function sendInvite($email, $groupId, string $user, bool $emailAlreadyIn): void
+    {
+        $invite = $this->inviteRepository->get($email, $groupId);
+        Mail::to($email)
+            ->send(new InviteSent($invite, $user));
     }
 }

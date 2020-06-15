@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
-    "password-validator": "^5.0.3"
+    "password-validator": "^5.0.3",
+    "vuelidate": "^0.7.5"
   }
 }

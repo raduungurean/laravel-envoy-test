@@ -2,22 +2,21 @@
 
 namespace App\Http\Actions;
 
-use App\Hash;
 use App\Http\Controllers\Controller;
-use App\Mail\RegisteredPleaseActivate;
+use App\Invite;
 use App\User;
 use Illuminate\Http\Request;
-use JWTAuth;
 use Validator;
-use Mail;
+use DB;
 
-class RegisterAction extends Controller
+class InviteAcceptAction extends Controller
 {
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|max:100',
             'last_name' => 'required|max:100',
+            'hash' => 'required',
             'email' => 'required|email|unique:users,email|max:100',
             'password' => 'required|min:6'
         ]);
@@ -25,6 +24,18 @@ class RegisterAction extends Controller
         if ($validator->fails()) {
             return response()->json(
                 ['errors' => $validator->errors()],
+                400
+            );
+        }
+
+        $invite = Invite::with('group')
+            ->with('user')
+            ->where('hash', $request->input('hash'))
+            ->first();
+
+        if (!$invite) {
+            return response()->json(
+                ['errors' => ['general' => 'Hash not available']],
                 400
             );
         }
@@ -37,19 +48,14 @@ class RegisterAction extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->save();
-
         $playerId = $user->id;
 
         if ($playerId) {
-            $hash = new Hash();
-            $hash->player_id = $playerId;
-            $hash->hash = hash_hmac('sha256', str_random(40), config('app.key'));;
-            $hash->save();
-
-            if ($hash->id) {
-                Mail::to($user)
-                    ->send(new RegisteredPleaseActivate($user, $hash->hash));
-            }
+            DB::table('user_group')->insert(
+                ['user_id' => $playerId, 'group_id' => $invite->group_id, ]
+            );
+            $invite->accepted = 'yes';
+            $invite->save();
         }
 
         return response()->json([

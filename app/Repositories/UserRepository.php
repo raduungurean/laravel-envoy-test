@@ -10,4 +10,5 @@ interface UserRepository
     public function inGroup(string $email, int $groupId);
     public function getCountGroups(int $userId);
     public function isEditorForGroup(int $userId, int $groupId);
+    public function checkByEmail(string $email);
 }

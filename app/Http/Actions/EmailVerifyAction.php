@@ -26,6 +26,7 @@ class EmailVerifyAction extends Controller
                 return view('auth-flow.activated-already', ['user' => $user]);
             }
         }
+
         return view('auth-flow.activation-error');
     }
 }

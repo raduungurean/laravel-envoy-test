@@ -5,6 +5,8 @@ Route::get('test', '\App\Http\Actions\TestAction');
 Route::post('login', '\App\Http\Actions\LoginAction');
 Route::post('register', '\App\Http\Actions\RegisterAction');
 Route::get('email/verify/{id}/{hash}', '\App\Http\Actions\EmailVerifyAction');
+Route::get('accept-invite/{code}', '\App\Http\Actions\InviteAcceptFormAction');
+Route::post('accept-invite', '\App\Http\Actions\InviteAcceptAction');
 Route::post('password-recovery-email', '\App\Http\Actions\PasswordRecoveryLinkAction');
 Route::get('password/{id}/{hash}', '\App\Http\Actions\RecoverPasswordFormAction');
 Route::post('password', '\App\Http\Actions\RecoverPasswordAction');

@@ -63,4 +63,12 @@ class DBUserRepository implements UserRepository
             ->whereIn('role_id', [1, 2, 3])
             ->exists();
     }
+
+    public function checkByEmail(string $email)
+    {
+        return DB::table('users')
+            ->where('email', $email)
+            ->where('deleted_at', 'IS NULL')
+            ->exists();
+    }
 }

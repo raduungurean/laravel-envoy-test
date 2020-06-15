@@ -10,6 +10,12 @@ require('@fortawesome/fontawesome-free/js/all.js');
 
 window.Vue = require('vue');
 window.passwordValidator = require('password-validator');
+window.Vuelidate = require('vuelidate');
+const { required, minLength, email, sameAs } = require('vuelidate/lib/validators');
+window.required = required;
+window.minLength = minLength;
+window.email = email;
+window.sameAs = sameAs;
 
 /**
  * The following block of code may be used to automatically register your
@@ -22,7 +28,9 @@ window.passwordValidator = require('password-validator');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.use(Vuelidate.default);
 Vue.component('forgot-password-component', require('./components/ForgotPasswordComponent.vue').default);
+Vue.component('accept-invite-component', require('./components/AcceptInviteComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

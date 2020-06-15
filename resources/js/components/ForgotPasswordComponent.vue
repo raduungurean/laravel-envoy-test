@@ -1,12 +1,12 @@
 <template>
     <section class="slice slice-sm">
         <div class="row mb-2">
-            <div class="col-sm-6">
+            <div class="col-sm-12 col-md-6 col-lg-4">
                 <h3>Set new password</h3>
             </div>
         </div>
         <div class="row mb-2">
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-12 col-md-6 col-lg-4">
                 <div v-if="showSuccess" class="alert alert-success pt-2 pb-2" role="alert">
                     Password updated.
                 </div>
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="row" v-if="!showSuccess">
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-12 col-md-6 col-lg-4">
                 <form autocomplete="off" @submit.prevent="requestResetPassword" method="post">
                     <div class="form-group">
                         <input v-bind:class="{ 'is-invalid': error && this.password.length }" class="form-control form-control-md" type="password" placeholder="Password *" required v-model="password" @keyup="matchesPassword()"  />

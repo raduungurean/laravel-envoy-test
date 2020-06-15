@@ -15,12 +15,14 @@ class DBInviteRepository implements InviteRepository
             ->exists();
     }
 
-    public function add(string $email, int $groupId, int $userId)
+    public function add(string $email, int $groupId, int $userId, string $message, bool $emailAlreadyIn)
     {
         $invite = new Invite();
         $invite->by = $userId;
         $invite->to_email = $email;
         $invite->group_id = $groupId;
+        $invite->message = $message;
+        $invite->email_already_in = $emailAlreadyIn ? 'yes' : 'no';
         $invite->hash = hash_hmac('sha256', str_random(40), config('app.key'));;
 
         return $invite->save();
