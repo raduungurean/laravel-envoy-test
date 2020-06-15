@@ -443,7 +443,7 @@
 </head>
 <body>
 <span class="preheader">
-    Thanks for trying out {{$app_name}}. We’ve pulled together some information and resources to help you get started.
+    Thanks for trying out {{$app_name}}.
 </span>
 <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
     <tr>
@@ -462,6 +462,7 @@
                         <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
                             <tr>
                                 <td class="content-cell" align="center">
+                                    <p>Derby.Today app helps organizing the football matches played by groups of friends.</p>
                                     <p class="f-fallback sub align-center">&copy; 2020 {{$app_name}}. All rights reserved.</p>
                                 </td>
                             </tr>

@@ -11,4 +11,5 @@ interface UserRepository
     public function getCountGroups(int $userId);
     public function isEditorForGroup(int $userId, int $groupId);
     public function checkByEmail(string $email);
+    public function getPendingInvites(int $userId);
 }

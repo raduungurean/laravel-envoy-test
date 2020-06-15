@@ -33,7 +33,9 @@ class LoginAction extends Controller
         if ($user) {
             $userArr = $user->toArray();
             $groups = $this->userRepository->getGroups($user->id);
+            $pendingInvites = $this->userRepository->getPendingInvites($user->id);
             $userArr['groups'] = $groups;
+            $userArr['pendingInvites'] = $pendingInvites;
         }
 
         if (isset($userArr)) {

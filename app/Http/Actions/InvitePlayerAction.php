@@ -4,6 +4,7 @@ namespace App\Http\Actions;
 
 use App\Http\Controllers\Controller;
 use App\Mail\InviteSent;
+use App\Mail\InviteSentUserExists;
 use App\Repositories\InviteRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -83,7 +84,13 @@ class InvitePlayerAction extends Controller
     private function sendInvite($email, $groupId, string $user, bool $emailAlreadyIn): void
     {
         $invite = $this->inviteRepository->get($email, $groupId);
-        Mail::to($email)
-            ->send(new InviteSent($invite, $user));
+
+        if ($emailAlreadyIn) {
+            Mail::to($email)
+                ->send(new InviteSentUserExists($invite, $user));
+        } else {
+            Mail::to($email)
+                ->send(new InviteSent($invite, $user));
+        }
     }
 }

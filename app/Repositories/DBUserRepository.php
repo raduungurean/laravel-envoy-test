@@ -3,6 +3,7 @@
 
 namespace App\Repositories;
 
+use App\Invite;
 use DB;
 
 class DBUserRepository implements UserRepository
@@ -32,6 +33,15 @@ class DBUserRepository implements UserRepository
         });
     }
 
+    public function getPendingInvites(int $userId)
+    {
+        return Invite::with('group')
+            ->with('user')
+            ->where('accepted', 'no')
+            ->where('email_already_in', 'yes')
+            ->get();
+    }
+
     public function getCountGroups(int $userId)
     {
         $sql = "SELECT COUNT(DISTINCT ug.id) as count
@@ -48,8 +58,8 @@ class DBUserRepository implements UserRepository
 
     public function inGroup(string $email, int $groupId)
     {
-        return DB::table('user_group')
-            ->join('users', 'users.id', '=', 'user_group.user_id')
+        return DB::table('users')
+            ->join('user_group', 'users.id', '=', 'user_group.user_id')
             ->where('user_group.group_id', $groupId)
             ->where('users.email', $email)
             ->exists();
@@ -68,7 +78,7 @@ class DBUserRepository implements UserRepository
     {
         return DB::table('users')
             ->where('email', $email)
-            ->where('deleted_at', 'IS NULL')
+            ->whereNull('deleted_at')
             ->exists();
     }
 }

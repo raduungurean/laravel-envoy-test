@@ -47,6 +47,7 @@ class InviteAcceptAction extends Controller
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
+        $user->email_verified_at = now();
         $user->save();
         $playerId = $user->id;
 
