@@ -15,11 +15,10 @@ class PlayerPictureAction extends Controller
         $user = $request->user();
         $userArray = $user->toArray();
         $photo = $userArray['photo'];
-        $file = 'photos' . DIRECTORY_SEPARATOR . $userArray['id'] . DIRECTORY_SEPARATOR . ($photo);
-
         if (empty($photo)) {
-            $file = 'photos' . DIRECTORY_SEPARATOR . 'player.jpg';
+            $photo = 'aaaa.jpg';
         }
+        $file = 'photos' . DIRECTORY_SEPARATOR . $userArray['id'] . DIRECTORY_SEPARATOR . ($photo);
 
         if (!Storage::disk('local')->exists($file)) {
             $defaultFile = 'public' . DIRECTORY_SEPARATOR . 'player.jpg';

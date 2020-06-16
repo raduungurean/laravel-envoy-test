@@ -21,6 +21,9 @@ class EmailVerifyAction extends Controller
             if ($checkHash->activated === 0 || is_null($checkHash->activated)) {
                 $checkHash->activated = 1;
                 $checkHash->save();
+                $user = User::where('id', $id)->first();
+                $user->email_verified_at = now();
+                $user->save();
                 return view('auth-flow.activated', [ 'user' => $user ]);
             } else {
                 return view('auth-flow.activated-already', ['user' => $user]);
