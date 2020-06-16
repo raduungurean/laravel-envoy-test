@@ -33,11 +33,12 @@ class DBUserRepository implements UserRepository
         });
     }
 
-    public function getPendingInvites(int $userId)
+    public function getPendingInvites(string $email)
     {
         return Invite::with('group')
             ->with('user')
             ->where('accepted', 'no')
+            ->where('to_email', $email)
             ->where('email_already_in', 'yes')
             ->get();
     }

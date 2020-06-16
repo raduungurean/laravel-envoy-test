@@ -6,8 +6,8 @@
                 <tr>
                     <td class="content-cell">
                         <div class="f-fallback">
-                            <h1>Hello</h1>
-                            <p>You have been invited by {{$user}} to join {{$app_name}}. Please login in the app and check your pending invitation requests.</p>
+                            <h1>Hello,</h1>
+                            <p>You have been invited by {{$user}} to join {{$app_name}}. Please login in the app and check your invitation requests.</p>
                             <p>If you have any questions, feel free to <a href="mailto:{{$support_email}}">email us</a>. (We're lightning quick at replying)</p>
                             <p>Thanks,<br>{{$app_user}} and the {{$app_name}} Team</p>
                         </div>

@@ -11,10 +11,15 @@ class PlayerPictureAction extends Controller
     public function __invoke(Request $request)
     {
         // TODO to verify by groupId if has access to view
+        // if not return empty profile photo
         $user = $request->user();
         $userArray = $user->toArray();
         $photo = $userArray['photo'];
-        $file = 'photos' . DIRECTORY_SEPARATOR .$userArray['id'] . DIRECTORY_SEPARATOR . ($photo);
+        $file = 'photos' . DIRECTORY_SEPARATOR . $userArray['id'] . DIRECTORY_SEPARATOR . ($photo);
+
+        if (empty($photo)) {
+            $file = 'photos' . DIRECTORY_SEPARATOR . 'player.jpg';
+        }
 
         if (!Storage::disk('local')->exists($file)) {
             $defaultFile = 'public' . DIRECTORY_SEPARATOR . 'player.jpg';
