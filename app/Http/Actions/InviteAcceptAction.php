@@ -40,6 +40,7 @@ class InviteAcceptAction extends Controller
             );
         }
 
+        // TODO: profile picture
         // TODO: move in repository
         // and use transactions
         $user = new User();

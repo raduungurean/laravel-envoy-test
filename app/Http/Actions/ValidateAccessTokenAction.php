@@ -39,6 +39,8 @@ class ValidateAccessTokenAction extends Controller
             $userArr = $user->toArray();
             $groups = $this->userRepository->getGroups($user->id);
             $userArr['groups'] = $groups;
+            $pendingInvites = $this->userRepository->getPendingInvites($user->id);
+            $userArr['pendingInvites'] = $pendingInvites;
 
             $token = JWTAuth::fromUser($user);
 

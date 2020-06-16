@@ -27,6 +27,8 @@ class VerifyUserExistsAction extends Controller
             $userArr = $user->toArray();
             $groups = $this->userRepository->getGroups($user->id);
             $userArr['groups'] = $groups;
+            $pendingInvites = $this->userRepository->getPendingInvites($user->id);
+            $userArr['pendingInvites'] = $pendingInvites;
 
             return response()->json([
                 'success' => true,

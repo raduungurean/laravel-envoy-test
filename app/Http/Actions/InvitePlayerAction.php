@@ -44,7 +44,7 @@ class InvitePlayerAction extends Controller
 
         $groupId = $request->input('group');
         $email = $request->input('email_address');
-        $message = $request->input('message');
+        $message = $request->input('msg') ? $request->input('msg') : '';
 
         // TODO: maybe create a service
         // to also include the super admin
