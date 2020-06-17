@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Invite;
+use DB;
 
 class DBInviteRepository implements InviteRepository
 {
@@ -32,6 +33,14 @@ class DBInviteRepository implements InviteRepository
     {
         return Invite::where('to_email', $email)
             ->where('group_id', $groupId)
+            ->first();
+    }
+
+    public function getByHashAndEmail(string $hash, string $email)
+    {
+        return Invite::where('hash', $hash)
+            ->where('to_email', $email)
+            ->where('accepted', 'no')
             ->first();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Actions;
 
+use App\Repositories\UserRepository;
 use App\User;
 use Exception;
 use Validator;
@@ -10,6 +11,13 @@ use Illuminate\Http\Request;
 
 class ProfileUpdateAction
 {
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function __invoke(Request $request)
     {
         $userId = Auth::user()->id;
@@ -28,30 +36,30 @@ class ProfileUpdateAction
             );
         }
 
-        $failed = false;
-
         try {
-            User::where('id', $userId)
-                ->update([
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'email' => $request->email,
-                    'username' => $request->username,
-                ]);
-        } catch (Exception $exception) {
-            $failed = true;
-        }
+            $user = User::find($userId);
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->email = $request->email;
+            $user->username = $request->username;
+            $user->save();
 
-        if ($failed) {
+            $userArr = $user->toArray();
+            $groups = $this->userRepository->getGroups($user->id);
+            $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
+            $userArr['groups'] = $groups;
+            $userArr['pendingInvites'] = $pendingInvites;
+
+            return response()->json([
+                'success' => true,
+                'user' => $userArr,
+                'message' => 'Successfully Updated.'
+            ]);
+        } catch (Exception $exception) {
             return response()->json(
                 ['errors' => ['general' => 'error updating the profile']],
                 400
             );
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Successfully Updated.'
-        ]);
     }
 }
