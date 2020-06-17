@@ -26,8 +26,11 @@ class ProfileUpdateAction
             'first_name' => 'required|max:100',
             'last_name' => 'required|max:100',
             'email' => 'required|email|unique:users,email,' . $userId . '|max:100',
-            'username' => 'max:50|unique:users,username,' . $userId,
         ]);
+
+        $validator->sometimes('username', 'max:50|unique:users,username,' . $userId, function($input) {
+            return !empty($input->username);
+        });
 
         if ($validator->fails()) {
             return response()->json(
