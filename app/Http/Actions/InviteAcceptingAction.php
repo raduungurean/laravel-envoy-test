@@ -36,7 +36,7 @@ class InviteAcceptingAction extends Controller
             }
 
             DB::table('role_user_group')->insert(
-                ['user_id' => $userId, 'role_id' => 2, 'group_id' => $invite->group_id]
+                ['user_id' => $userId, 'role_id' => 4, 'group_id' => $invite->group_id]
             );
             DB::table('user_group')->insert(
                 ['user_id' => $userId, 'group_id' => $invite->group_id, ]
