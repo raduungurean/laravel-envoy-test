@@ -24,10 +24,9 @@ class PlayersAction extends Controller
         }
 
         $paginator = DB::table('users')
-            ->select('*', DB::raw('CAST(stats->>\'$.total\' as UNSIGNED) as total'))
+            ->select('*')
             ->join('user_group', 'user_group.user_id', '=', 'users.id')
             ->whereIn('user_group.group_id', $allowedGroups)
-            ->orderBy('total', 'desc')
             ->paginate();
 
         $paginator->getCollection()->transform(function ($value) {
