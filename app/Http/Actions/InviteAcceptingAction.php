@@ -18,8 +18,7 @@ class InviteAcceptingAction extends Controller
     public function __construct(
         UserRepository $userRepository,
         InviteRepository $inviteRepository
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->inviteRepository = $inviteRepository;
     }

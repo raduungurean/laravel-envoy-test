@@ -462,7 +462,7 @@
                         <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" role="presentation">
                             <tr>
                                 <td class="content-cell" align="center">
-                                    <p>Derby.Today app helps organizing the football matches played by groups of friends.</p>
+                                    <p>Derby.Today - the easiest way to organize football matches with your friends</p>
                                     <p class="f-fallback sub align-center">&copy; 2020 {{$app_name}}. All rights reserved.</p>
                                 </td>
                             </tr>

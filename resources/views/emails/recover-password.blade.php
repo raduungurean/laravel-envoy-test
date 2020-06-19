@@ -21,7 +21,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <p>Thanks, <br>The {{$app_name}} Team</p>
+                        <p>Thanks,<br>Stefan {{$app_user}} from {{$app_name}}</p>
                         <table class="body-sub" role="presentation">
                             <tr>
                                 <td>

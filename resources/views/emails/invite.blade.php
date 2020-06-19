@@ -22,7 +22,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <p>If you have any questions, feel free to <a href="mailto:{{$support_email}}">email us</a>. (We're lightning quick at replying)</p>
+                            <p>If you have any questions, feel free to <a href="mailto:{{$support_email}}">email us</a>.</p>
                             <p>Thanks,<br>{{$app_user}} and the {{$app_name}} Team</p>
                             <table class="body-sub" role="presentation">
                                 <tr>
