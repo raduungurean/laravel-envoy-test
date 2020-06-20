@@ -20,6 +20,8 @@ class PlayersAction extends Controller
             if (!in_array($groupId, $allowedGroups)) {
                 // not allowed
                 $allowedGroups = [-1];
+            } else {
+                $allowedGroups = [$groupId];
             }
         }
 
