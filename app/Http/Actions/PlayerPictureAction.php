@@ -19,7 +19,6 @@ class PlayerPictureAction extends Controller
             $photo = 'aaaa.jpg';
         }
         $file = 'photos' . DIRECTORY_SEPARATOR . $userArray['id'] . DIRECTORY_SEPARATOR . ($photo);
-
         if (!Storage::disk('local')->exists($file)) {
             $defaultFile = 'public' . DIRECTORY_SEPARATOR . 'player.jpg';
             $filePath = storage_path('app' . DIRECTORY_SEPARATOR . $defaultFile);

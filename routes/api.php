@@ -12,8 +12,7 @@ Route::post('password', '\App\Http\Actions\RecoverPasswordAction');
 Route::post('validate-access-token', '\App\Http\Actions\ValidateAccessTokenAction');
 Route::post('create-account', '\App\Http\Actions\CreateAccountFromProviderAction');
 
-Route::post('log', '\App\Http\Actions\LogAction');
-Route::get('logs', '\App\Http\Actions\LogsAction');
+Route::get('player-thumb', '\App\Http\Actions\PlayerThumbAction');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', '\App\Http\Actions\LogoutAction');
