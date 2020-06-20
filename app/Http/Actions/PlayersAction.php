@@ -29,11 +29,21 @@ class PlayersAction extends Controller
             ->select('*')
             ->join('user_group', 'user_group.user_id', '=', 'users.id')
             ->whereIn('user_group.group_id', $allowedGroups)
+            ->whereNull('deleted_at')
             ->paginate();
 
         $paginator->getCollection()->transform(function ($value) {
-            $value->thumb = config('app.url') . 'storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $value->id . DIRECTORY_SEPARATOR . $value->photo;
+            $value->thumb = config('app.url') . 'storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $value->user_id . DIRECTORY_SEPARATOR . $value->photo;
             $value->stats = json_decode($value->stats);
+            unset($value->email,
+                $value->email_verified_at,
+                $value->photo,
+                $value->password,
+                $value->remember_token,
+                $value->deleted_at,
+                $value->notifications,
+                $value->user_id,
+                $value->group_id);
             return $value;
         });
 
