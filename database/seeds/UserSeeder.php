@@ -33,7 +33,16 @@ class UserSeeder extends MySeeder
                     $user->photo = $photoName;
                     $user->save();
                     $contents = file_get_contents($jsonUser->photo);
-                    Storage::disk('local')->put('photos/' . $id . '/' . $photoName, $contents);
+                    $photoPath = 'photos/' . $id . '/' . $photoName;
+                    Storage::disk('local')->put($photoPath, $contents);
+                    $toPath = storage_path() . '/app/public/photos/' . $id . '/';
+                    $toPathForStorage = '/public/photos/' . $id . '/';
+                    if(!Storage::exists($toPathForStorage)){
+                        Storage::makeDirectory($toPathForStorage);
+                    }
+                    Image::make(storage_path() . '/app/' . $photoPath)
+                        ->fit(50, 50)
+                        ->save($toPath . $photoName);
                 }
                 DB::table('role_user_group')->insert(
                     ['role_id' => 4, 'user_id' => $id, 'group_id' => $groupId]
