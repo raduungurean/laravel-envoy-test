@@ -35,6 +35,7 @@ class PlayersAction extends Controller
         $paginator->getCollection()->transform(function ($value) {
             $value->thumb = config('app.url') . 'storage' . DIRECTORY_SEPARATOR . 'photos' . DIRECTORY_SEPARATOR . $value->user_id . DIRECTORY_SEPARATOR . $value->photo;
             $value->stats = json_decode($value->stats);
+            $value->id = $value->user_id;
             unset($value->email,
                 $value->email_verified_at,
                 $value->photo,
