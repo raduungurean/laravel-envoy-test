@@ -7,6 +7,7 @@ use App\User;
 use Validator;
 use Auth;
 use Image;
+use Storage;
 use Illuminate\Http\Request;
 
 class ProfilePictureAction
