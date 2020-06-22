@@ -63,7 +63,7 @@ class ProfilePictureAction
 
         if ($failed) {
             return response()->json(
-                ['errors' => ['general' => 'error updating the password']],
+                ['errors' => ['general' => 'error uploading profile picture' . $exception->getMessage()]],
                 400
             );
         }
