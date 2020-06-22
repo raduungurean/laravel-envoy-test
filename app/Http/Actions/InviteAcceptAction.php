@@ -53,6 +53,9 @@ class InviteAcceptAction extends Controller
         $playerId = $user->id;
 
         if ($playerId) {
+            DB::table('role_user_group')->insert(
+                ['user_id' => $playerId, 'role_id' => 4, 'group_id' => $invite->group_id]
+            );
             DB::table('user_group')->insert(
                 ['user_id' => $playerId, 'group_id' => $invite->group_id, ]
             );

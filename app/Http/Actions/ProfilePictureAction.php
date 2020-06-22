@@ -2,6 +2,7 @@
 
 namespace App\Http\Actions;
 
+use App\Repositories\UserRepository;
 use App\User;
 use Validator;
 use Auth;
@@ -10,6 +11,13 @@ use Illuminate\Http\Request;
 
 class ProfilePictureAction
 {
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function __invoke(Request $request)
     {
         $userId = Auth::user()->id;
@@ -29,11 +37,17 @@ class ProfilePictureAction
         $fileName = str_random() . '.' . $extension;
 
         $failed = false;
+        $path = '/app/photos/' . $userId . '/' . $fileName;
 
         try {
             Image::make($request->file('photo'))
                 ->fit(800, 800)
-                ->save(storage_path() . '/app/photos/' . $userId . '/' . $fileName);
+                ->save(storage_path() . $path);
+
+            $toPath = storage_path() . '/app/public/photos/' . $userId . '/';
+            Image::make(storage_path() . $path)
+                ->fit(50, 50)
+                ->save($toPath . $fileName);
         } catch (\Exception $exception) {
             $failed = true;
         }
@@ -54,8 +68,22 @@ class ProfilePictureAction
             );
         }
 
+        $user = User::find($userId);
+
+        if ($user) {
+            $userArr = $user->toArray();
+            $groups = $this->userRepository->getGroups($user->id);
+            $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
+            $userArr['groups'] = $groups;
+            $userArr['pendingInvites'] = $pendingInvites;
+        }
+
         return response()->json([
             'success' => true,
+            'userId' => $userId,
+            'path' => $path,
+            'toPath' => $toPath . $fileName,
+            'user' => $user,
             'message' => 'Successfully Updated.'
         ]);
     }
