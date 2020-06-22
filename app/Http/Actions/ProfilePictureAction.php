@@ -41,20 +41,26 @@ class ProfilePictureAction
         $path = '/app/photos/' . $userId . '/' . $fileName;
 
         try {
+
+            $toPathForStorage = '/photos/' . $userId . '/';
+            if (!Storage::exists($toPathForStorage)){
+                Storage::makeDirectory($toPathForStorage);
+            }
+
             Image::make($request->file('photo'))
                 ->fit(800, 800)
                 ->save(storage_path() . $path);
 
             $toPath = storage_path() . '/app/public/photos/' . $userId . '/';
 
-//            $toPathForStorage = '/public/photos/' . $userId . '/';
-//            if (!Storage::exists($toPathForStorage)){
-//                Storage::makeDirectory($toPathForStorage);
-//            }
-//
-//            Image::make(storage_path() . $path)
-//                ->fit(50, 50)
-//                ->save($toPath . $fileName);
+            $toPathForStorage = '/public/photos/' . $userId . '/';
+            if (!Storage::exists($toPathForStorage)){
+                Storage::makeDirectory($toPathForStorage);
+            }
+
+            Image::make(storage_path() . $path)
+                ->fit(50, 50)
+                ->save($toPath . $fileName);
         } catch (\Exception $exception) {
             $failed = true;
         }
