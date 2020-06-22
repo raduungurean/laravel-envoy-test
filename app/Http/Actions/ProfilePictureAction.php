@@ -45,6 +45,10 @@ class ProfilePictureAction
                 ->save(storage_path() . $path);
 
             $toPath = storage_path() . '/app/public/photos/' . $userId . '/';
+            $toPathForStorage = '/public/photos/' . $userId . '/';
+            if(!Storage::exists($toPathForStorage)){
+                Storage::makeDirectory($toPathForStorage);
+            }
             Image::make(storage_path() . $path)
                 ->fit(50, 50)
                 ->save($toPath . $fileName);
