@@ -3,6 +3,7 @@
 namespace App\Http\Actions;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\User;
 use Socialite;
@@ -12,6 +13,13 @@ use Str;
 
 class CreateAccountFromProviderAction extends Controller
 {
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function __invoke(Request $request)
     {
         try {
@@ -57,18 +65,33 @@ class CreateAccountFromProviderAction extends Controller
                     $newUserAccount->photo = $photoName;
                     $newUserAccount->save();
                     $contents = file_get_contents($profileImage);
+
                     Storage::disk('local')
                         ->put('photos/' . $newUserAccountId . '/' . $photoName, $contents);
+
+                    $toPath = storage_path() . '/app/public/photos/' . $newUserAccountId . '/';
+                    $toPathForStorage = '/public/photos/' . $newUserAccountId . '/';
+                    if (!Storage::exists($toPathForStorage)){
+                        Storage::makeDirectory($toPathForStorage);
+                    }
+                    $fileName = str_random() . '.' . $extension;
+                    $path = '/app/photos/' . $newUserAccountId . '/' . $fileName;
+                    Image::make(storage_path() . $path)
+                        ->fit(50, 50)
+                        ->save($toPath . $fileName);
                 }
 
                 $token = JWTAuth::fromUser($newUserAccount);
 
-                $retUser = $newUserAccount->toArray();
-                $retUser['groups'] = [];
+                $userArr = $newUserAccount->toArray();
+                $groups = $this->userRepository->getGroups($user->id);
+                $userArr['groups'] = $groups;
+                $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
+                $userArr['pendingInvites'] = $pendingInvites;
                 return response()->json([
                     'success' => true,
                     'token' => $token,
-                    'user' => $retUser,
+                    'user' => $userArr,
                 ]);
             }
         }
