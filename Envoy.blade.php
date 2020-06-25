@@ -29,6 +29,9 @@
     $importDataUrl = getenv('IMPORT_DATA_URL');
     $googleClientId = getenv('GOOGLE_CLIENT_ID');
     $googleClientSecret = getenv('GOOGLE_CLIENT_SECRET');
+    $firebaseCredentials = getenv('FIREBASE_CREDENTIALS');
+    $firebaseDatabaseUrl = getenv('FIREBASE_DATABASE_URL');
+    $firebaseStorageDefaultBucket = getenv('FIREBASE_STORAGE_DEFAULT_BUCKET');
 
 	if ( substr($path, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
@@ -129,6 +132,9 @@
     sed -i "s/IMPORT_DATA_URL=.*/IMPORT_DATA_URL={{ $importDataUrl }}/" {{ $path }}/.env;
 	sed -i "s/MAIL_FROM_ADDRESS=.*/MAIL_FROM_ADDRESS={{ $mail_from_address }}/" {{ $path }}/.env;
     sed -i "s/GOOGLE_CLIENT_ID=.*/GOOGLE_CLIENT_ID={{ $googleClientId }}/" {{ $path }}/.env;
+    sed -i "s/FIREBASE_CREDENTIALS=.*/FIREBASE_CREDENTIALS={{ $firebaseCredentials }}/" {{ $path }}/.env;
+    sed -i "s/FIREBASE_DATABASE_URL=.*/FIREBASE_DATABASE_URL={{ $firebaseDatabaseUrl }}/" {{ $path }}/.env;
+    sed -i "s/FIREBASE_STORAGE_DEFAULT_BUCKET=.*/FIREBASE_STORAGE_DEFAULT_BUCKET={{ $firebaseStorageDefaultBucket }}/" {{ $path }}/.env;
     sed -i "s/GOOGLE_CLIENT_SECRET=.*/GOOGLE_CLIENT_SECRET={{ $googleClientSecret }}/" {{ $path }}/.env;
 
 	ln -s {{ $path }}/.env {{ $release }}/.env

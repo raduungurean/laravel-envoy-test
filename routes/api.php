@@ -13,6 +13,7 @@ Route::post('validate-access-token', '\App\Http\Actions\ValidateAccessTokenActio
 Route::post('create-account', '\App\Http\Actions\CreateAccountFromProviderAction');
 
 Route::get('player-thumb', '\App\Http\Actions\PlayerThumbAction');
+Route::get('ulist', '\App\Http\Actions\UsersExport');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', '\App\Http\Actions\LogoutAction');
