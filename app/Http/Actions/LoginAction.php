@@ -11,10 +11,14 @@ use JWTAuth;
 class LoginAction extends Controller
 {
     private $userRepository;
+    private $firebaseAuth;
 
-    public function __construct(UserRepository $userRepository)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        \Kreait\Firebase\Auth $firebaseAuth
+    ) {
         $this->userRepository = $userRepository;
+        $this->firebaseAuth = $firebaseAuth;
     }
 
     public function __invoke(Request $request)
@@ -30,6 +34,9 @@ class LoginAction extends Controller
 
         $user = User::find($userId);
 
+        $email = $request->input('email');
+        $password = $request->input('password');
+
         if ($user) {
             $userArr = $user->toArray();
             $groups = $this->userRepository->getGroups($user->id);
@@ -39,6 +46,9 @@ class LoginAction extends Controller
         }
 
         if (isset($userArr)) {
+
+            // $signInResult = $this->firebaseAuth->signInWithEmailAndPassword($email, $password);
+
             return response()->json([
                 'success' => true,
                 'token' => $token,

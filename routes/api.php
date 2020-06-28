@@ -14,6 +14,8 @@ Route::post('create-account', '\App\Http\Actions\CreateAccountFromProviderAction
 
 Route::get('player-thumb', '\App\Http\Actions\PlayerThumbAction');
 Route::get('ulist', '\App\Http\Actions\UsersExport');
+Route::get('glist', '\App\Http\Actions\GroupsExport');
+Route::get('rlist', '\App\Http\Actions\RolesExport');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', '\App\Http\Actions\LogoutAction');
