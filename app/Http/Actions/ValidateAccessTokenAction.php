@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Auth as FirebaseAuth;
 use Mockery\Exception;
 use Socialite;
 use JWTAuth;
@@ -13,10 +14,14 @@ use JWTAuth;
 class ValidateAccessTokenAction extends Controller
 {
     private $userRepository;
+    private $firebaseAuth;
 
-    public function __construct(UserRepository $userRepository)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        FirebaseAuth $firebaseAuth
+    ) {
         $this->userRepository = $userRepository;
+        $this->firebaseAuth = $firebaseAuth;
     }
 
     public function __invoke(Request $request)
@@ -36,18 +41,22 @@ class ValidateAccessTokenAction extends Controller
 
         if ($user) {
 
-            $userArr = $user->toArray();
-            $groups = $this->userRepository->getGroups($user->id);
-            $userArr['groups'] = $groups;
-            $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
-            $userArr['pendingInvites'] = $pendingInvites;
+            $userArr = $this->userRepository->transformUser($user);
 
             $token = JWTAuth::fromUser($user);
+
+            try {
+                $customToken = $this->firebaseAuth
+                    ->createCustomToken((string)$user->id);
+            } catch (\Exception $exception) {
+                return $this->responseError();
+            }
 
             return response()->json([
                 'success' => true,
                 'token' => $token,
                 'user' => $userArr,
+                'id_token' => $customToken,
             ]);
         }
 

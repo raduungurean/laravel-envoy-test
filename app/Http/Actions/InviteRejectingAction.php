@@ -36,11 +36,7 @@ class InviteRejectingAction extends Controller
 
             $invite->delete();
 
-            $userArr = $user->toArray();
-            $groups = $this->userRepository->getGroups($user->id);
-            $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
-            $userArr['groups'] = $groups;
-            $userArr['pendingInvites'] = $pendingInvites;
+            $userArr = $this->userRepository->transformUser($user);
 
             return response()->json([
                 'success' => true,

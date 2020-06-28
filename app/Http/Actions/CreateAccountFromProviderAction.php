@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\User;
+use Kreait\Firebase\Auth as FirebaseAuth;
 use Socialite;
 use Storage;
 use JWTAuth;
@@ -14,10 +15,14 @@ use Str;
 class CreateAccountFromProviderAction extends Controller
 {
     private $userRepository;
+    private $firebaseAuth;
 
-    public function __construct(UserRepository $userRepository)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        FirebaseAuth $firebaseAuth
+    ) {
         $this->userRepository = $userRepository;
+        $this->firebaseAuth = $firebaseAuth;
     }
 
     public function __invoke(Request $request)
@@ -83,15 +88,23 @@ class CreateAccountFromProviderAction extends Controller
 
                 $token = JWTAuth::fromUser($newUserAccount);
 
-                $userArr = $newUserAccount->toArray();
-                $groups = $this->userRepository->getGroups($user->id);
-                $userArr['groups'] = $groups;
-                $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
-                $userArr['pendingInvites'] = $pendingInvites;
+                $userArr = $this->userRepository->transformUser($newUserAccount);
+
+                if (isset($userArr)) {
+
+                    try {
+                        $customToken = $this->firebaseAuth
+                            ->createCustomToken((string)$user->id);
+                    } catch (\Exception $exception) {
+                        return $this->responseError();
+                    }
+                }
+
                 return response()->json([
                     'success' => true,
                     'token' => $token,
                     'user' => $userArr,
+                    'id_token' => (string) $customToken,
                 ]);
             }
         }

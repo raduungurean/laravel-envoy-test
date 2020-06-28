@@ -75,20 +75,17 @@ class ProfilePictureAction
         }
 
         if ($failed) {
-            return response()->json(
-                ['errors' => ['general' => 'error uploading profile picture' . $exception->getMessage()]],
-                400
-            );
+            return $this->responseFailed($exception->getMessage());
         }
 
         $user = User::find($userId);
 
         if ($user) {
-            $userArr = $user->toArray();
-            $groups = $this->userRepository->getGroups($user->id);
-            $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
-            $userArr['groups'] = $groups;
-            $userArr['pendingInvites'] = $pendingInvites;
+            $userArr = $this->userRepository->transformUser($user);
+        }
+
+        if (!isset($userArr)) {
+            return $this->responseFailed('');
         }
 
         return response()->json([
@@ -96,8 +93,16 @@ class ProfilePictureAction
             'userId' => $userId,
             'path' => $path,
             'toPath' => $toPath . $fileName,
-            'user' => $user,
+            'user' => $userArr,
             'message' => 'Successfully Updated.'
         ]);
+    }
+
+    private function responseFailed($message)
+    {
+        return response()->json(
+            ['errors' => ['general' => 'error uploading profile picture' . $message]],
+            400
+        );
     }
 }

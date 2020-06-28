@@ -40,4 +40,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->belongsToMany('App\Group', 'user_group');
     }
+
+    public function roles()
+    {
+        return $this
+            ->belongsToMany('App\Role', 'role_user_group', 'user_id', 'role_id')
+            ->withPivot('group_id');
+    }
 }

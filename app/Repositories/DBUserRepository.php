@@ -82,4 +82,15 @@ class DBUserRepository implements UserRepository
             ->whereNull('deleted_at')
             ->exists();
     }
+
+    public function transformUser($userObject)
+    {
+        $userArr = $userObject->toArray();
+        $groups = $this->getGroups($userArr['id']);
+        $pendingInvites = $this->getPendingInvites($userArr['email']);
+        $userArr['groups'] = $groups;
+        $userArr['pendingInvites'] = $pendingInvites;
+
+        return $userArr;
+    }
 }

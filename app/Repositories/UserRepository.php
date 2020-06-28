@@ -12,4 +12,5 @@ interface UserRepository
     public function isEditorForGroup(int $userId, int $groupId);
     public function checkByEmail(string $email);
     public function getPendingInvites(string $email);
+    public function transformUser($userObject);
 }

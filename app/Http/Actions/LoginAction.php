@@ -7,6 +7,7 @@ use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
 use JWTAuth;
+use Kreait\Firebase\Auth as FirebaseAuth;
 
 class LoginAction extends Controller
 {
@@ -15,7 +16,7 @@ class LoginAction extends Controller
 
     public function __construct(
         UserRepository $userRepository,
-        \Kreait\Firebase\Auth $firebaseAuth
+        FirebaseAuth $firebaseAuth
     ) {
         $this->userRepository = $userRepository;
         $this->firebaseAuth = $firebaseAuth;
@@ -34,25 +35,28 @@ class LoginAction extends Controller
 
         $user = User::find($userId);
 
-        $email = $request->input('email');
-        $password = $request->input('password');
-
-        if ($user) {
-            $userArr = $user->toArray();
-            $groups = $this->userRepository->getGroups($user->id);
-            $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
-            $userArr['groups'] = $groups;
-            $userArr['pendingInvites'] = $pendingInvites;
+        if (!$user) {
+            return $this->responseError();
         }
+
+        $userArr = $this->userRepository->transformUser($user);
 
         if (isset($userArr)) {
 
-            // $signInResult = $this->firebaseAuth->signInWithEmailAndPassword($email, $password);
+            try {
+                $customToken = $this->firebaseAuth
+                    ->createCustomToken((string)$userId);
+            } catch (\Exception $exception) {
+                echo($exception->getMessage());
+                die();
+                return $this->responseError();
+            }
 
             return response()->json([
                 'success' => true,
                 'token' => $token,
                 'user' => $userArr,
+                'id_token' => (string) $customToken,
             ]);
         }
 
@@ -67,5 +71,3 @@ class LoginAction extends Controller
         ], 401);
     }
 }
-
-

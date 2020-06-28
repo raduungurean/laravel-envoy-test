@@ -24,11 +24,8 @@ class VerifyUserExistsAction extends Controller
             ->first();
 
         if ($user) {
-            $userArr = $user->toArray();
-            $groups = $this->userRepository->getGroups($user->id);
-            $userArr['groups'] = $groups;
-            $pendingInvites = $this->userRepository->getPendingInvites($userArr['email']);
-            $userArr['pendingInvites'] = $pendingInvites;
+
+            $userArr = $this->userRepository->transformUser($user);
 
             return response()->json([
                 'success' => true,
