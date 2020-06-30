@@ -16,6 +16,7 @@ Route::get('player-thumb', '\App\Http\Actions\PlayerThumbAction');
 Route::get('ulist', '\App\Http\Actions\UsersExport');
 Route::get('glist', '\App\Http\Actions\GroupsExport');
 Route::get('rlist', '\App\Http\Actions\RolesExport');
+Route::get('mlist', '\App\Http\Actions\MatchesExport');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', '\App\Http\Actions\LogoutAction');

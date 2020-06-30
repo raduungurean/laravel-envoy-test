@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Match extends Model
 {
-    //
+    public function subscriptions()
+    {
+        return $this->hasMany('App\Subscription');
+    }
 }

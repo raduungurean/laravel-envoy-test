@@ -42,6 +42,7 @@ class MatchesSeeder extends MySeeder
             $match->team_blue_score = $teamBlueScore;
             $match->location_id = $locationId;
             $match->group_id = $groupId;
+
             if ($match->save()) {
                 foreach ($subscriptions as $subscription) {
                     $player = User::where('old_id', $subscription->player_id)->first();

@@ -113,9 +113,12 @@
 
 @task('deployment_links')
 	cd {{ $path }}
+    rm -rf public/storage
 	rm -rf {{ $release }}/storage
 	ln -s {{ $path }}/storage {{ $release }}/storage
 	ln -s {{ $path }}/storage/public {{ $release }}/public/storage
+    php {{ $release }}/artisan storage:link
+
 	echo "Storage directories set up"
 
     sed -i "s/APP_ENV=.*/APP_ENV=production/" {{ $path }}/.env;
