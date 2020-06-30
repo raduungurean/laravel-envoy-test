@@ -117,7 +117,6 @@
 	rm -rf {{ $release }}/storage
 	ln -s {{ $path }}/storage {{ $release }}/storage
 	ln -s {{ $path }}/storage/public {{ $release }}/public/storage
-    php {{ $path }}/artisan storage:link
 
 	echo "Storage directories set up"
 
@@ -158,6 +157,7 @@
 	php {{ $release }}/artisan view:clear --quiet
 	php {{ $release }}/artisan cache:clear --quiet
 	php {{ $release }}/artisan config:cache --quiet
+    php {{ $release }}/artisan storage:link
 	echo "Cache cleared"
 @endtask
 
