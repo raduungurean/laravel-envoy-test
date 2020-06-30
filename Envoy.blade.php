@@ -113,7 +113,6 @@
 
 @task('deployment_links')
 	cd {{ $path }}
-    rm -rf public/storage
 	rm -rf {{ $release }}/storage
 	ln -s {{ $path }}/storage {{ $release }}/storage
 	ln -s {{ $path }}/storage/public {{ $release }}/public/storage
@@ -157,6 +156,7 @@
 	php {{ $release }}/artisan view:clear --quiet
 	php {{ $release }}/artisan cache:clear --quiet
 	php {{ $release }}/artisan config:cache --quiet
+    rm -rf {{ $release }}/public/storage
     php {{ $release }}/artisan storage:link
 	echo "Cache cleared"
 @endtask
