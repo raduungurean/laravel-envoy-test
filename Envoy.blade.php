@@ -117,7 +117,7 @@
 	rm -rf {{ $release }}/storage
 	ln -s {{ $path }}/storage {{ $release }}/storage
 	ln -s {{ $path }}/storage/public {{ $release }}/public/storage
-    php {{ $release }}/artisan storage:link
+    php {{ $path }}/artisan storage:link
 
 	echo "Storage directories set up"
 
