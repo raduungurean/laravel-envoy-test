@@ -8,9 +8,20 @@ use DB;
 
 class DBUserRepository implements UserRepository
 {
-    public function getGroups(int $userId)
+    public function getGroups(int $userId = null)
     {
-        $sql = 'SELECT g.*, COUNT(DISTINCT ug1.user_id) as group_users, GROUP_CONCAT(DISTINCT r.name) as roles
+        if (is_null($userId)) {
+            $sql = 'SELECT g.*, COUNT(DISTINCT ug1.user_id) as group_users, COUNT(DISTINCT m.id) as group_matches
+        	FROM groups g
+                LEFT JOIN user_group ug1 on ug1.group_id = g.id
+				INNER JOIN role_user_group rug on g.id = rug.group_id
+				LEFT JOIN matches m ON m.group_id = g.id
+            WHERE g.deleted_at IS NULL
+            GROUP BY g.id';
+
+            $groups = DB::select( $sql );
+        } else {
+            $sql = 'SELECT g.id, COUNT(DISTINCT ug1.user_id) as group_users, GROUP_CONCAT(DISTINCT r.name) as roles
         	FROM groups g
                 INNER JOIN user_group ug on ug.group_id = g.id
                 INNER JOIN users u on u.id = ug.user_id AND u.id = :userId
@@ -20,17 +31,19 @@ class DBUserRepository implements UserRepository
             WHERE g.deleted_at IS NULL
             GROUP BY ug.group_id';
 
-        $groups = DB::select( DB::raw( $sql ), array(
-            'userId' => $userId,
-            'userId1' => $userId,
-        ));
+            $groups = DB::select( DB::raw( $sql ), array(
+                'userId' => $userId,
+                'userId1' => $userId,
+            ));
+            return collect($groups)->map(function($group) {
+                $group->roles = array_map(function($role) {
+                    return strtolower($role);
+                }, explode(',', $group->roles));
+                return $group;
+            });
+        }
 
-        return collect($groups)->map(function($group) {
-            $group->roles = array_map(function($role) {
-                return strtolower($role);
-            }, explode(',', $group->roles));
-            return $group;
-        });
+        return $groups;
     }
 
     public function getPendingInvites(string $email)
